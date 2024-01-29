@@ -28,7 +28,7 @@ Viewing IDC Data directly in Slicer is one of the features we are planning to br
 ### Steps to try out this feature: 
 1. Git clone this repo.
 ```bash
-git clone https://github.com/ImagingDataCommons/SlicerIDCBrowser.git
+git clone https://github.com/vkt1414/SlicerIDCBrowser.git
 ```
 2. Checkout add-slicer-idc-viewer branch (eventually this feature will be available on main branch)
 ```bash
