@@ -36,7 +36,7 @@ cd SlicerIDCBrowser
 git checkout add-slicer-idc-viewer
 ```
 
-3. Add the `src` folder as one of the module paths in Slicer settings. Refer to the screenshot below for more information:
+3. Add the `IDCBrowser` folder as one of the module paths in Slicer settings. Refer to the screenshot below for more information:
    
 ![Screenshot (17)](https://github.com/vkt1414/slicer-idc-viewer/assets/115020590/48b5a945-3d81-45f8-b7e5-9b1e9f1024e9)
 
