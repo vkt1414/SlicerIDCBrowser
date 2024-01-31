@@ -15,7 +15,7 @@ from slicer.ScriptedLoadableModule import *
 from slicer.util import VTKObservationMixin
 
 # Register slicer url
-def register_slicer_url_protocol():
+def register_linux_slicer_url_protocol():
     if platform.system() == "Linux":
         # Check if the protocol is already registered
         if os.path.exists(
@@ -52,8 +52,108 @@ def get_slicer_location():
     return launcherPath
 
 
-register_slicer_url_protocol()
+register_linux_slicer_url_protocol()
 
+def check_macos_slicer_protocol_registration():
+    plist_path = os.path.expanduser("/Applications/slicer-app.app/Contents/Info.plist")
+    return os.path.exists(plist_path)
+
+def register_macos_slicer_url_protocol():
+    if check_macos_slicer_protocol_registration():
+        print("Slicer URL protocol is already registered.")
+        return
+
+    # Create the AppleScript
+    applescript_path = os.path.expanduser("~/slicer.applescript")
+    with open(applescript_path, "w") as applescript_file:
+        applescript_file.write("""
+on open location this_URL
+    do shell script "/Applications/Slicer.app/Contents/MacOS/Slicer " & quoted form of this_URL
+end open location
+""")
+
+    # Compile the AppleScript into an app
+    os.system(f"osacompile -o /Applications/slicer-app.app {applescript_path}")
+
+
+    # Create or modify the plist file
+    plist_content = """
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleAllowMixedLocalizations</key>
+    <true/>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleExecutable</key>
+    <string>applet</string>
+    <key>CFBundleIconFile</key>
+    <string>applet</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>slicer-app</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>aplt</string>
+    <key>LSMinimumSystemVersionByArchitecture</key>
+    <dict>
+        <key>x86_64</key>
+        <string>10.6</string>
+    </dict>
+    <key>LSRequiresCarbon</key>
+    <true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>This script needs to control other applications to run.</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>This script needs access to your music to run.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>This script needs access to your calendars to run.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This script needs access to your camera to run.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>This script needs access to your contacts to run.</string>
+    <key>NSHomeKitUsageDescription</key>
+    <string>This script needs access to your HomeKit Home to run.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This script needs access to your microphone to run.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This script needs access to your photos to run.</string>
+    <key>NSRemindersUsageDescription</key>
+    <string>This script needs access to your reminders to run.</string>
+    <key>NSSiriUsageDescription</key>
+    <string>This script needs access to Siri to run.</string>
+    <key>NSSystemAdministrationUsageDescription</key>
+    <string>This script needs access to administer this system to run.</string>
+    <key>OSAAppletShowStartupScreen</key>
+    <false/>
+    <key>CFBundleIdentifier</key>
+    <string>slicer.protocol.registration</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>Slicer</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>slicer</string>
+            </array>
+        </dict>
+    </array>
+</dict>
+</plist>
+"""
+
+    plist_path = os.path.expanduser("/Applications/slicer-app.app/Contents/Info.plist")
+    with open(plist_path, "w") as plist_file:
+        plist_file.write(plist_content)
+
+    print("Slicer URL protocol registered successfully.")
+
+
+register_macos_slicer_url_protocol()
 
 def is_module_installed(module_name):
     """
