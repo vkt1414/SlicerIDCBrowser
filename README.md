@@ -1,4 +1,6 @@
 3D Slicer IDC Browser extension
+Examples: http://idcbrowser://collections
+
 ===========
 
 ![logo](https://github.com/ImagingDataCommons/SlicerIDCBrowser/blob/c9519809522aaac59bb65fb558b1197cf05c3e72/IDCBrowser/Resources/Icons/IDCBrowser.png?raw=true)
