@@ -1,5 +1,16 @@
 3D Slicer IDC Browser extension
-Examples: http://idcbrowser://collections
+
+# My Project
+
+This project includes a custom URL scheme for IDC Browser.
+
+To view the available collections, click [here](https://localhost:2042/idc/collections).
+
+You can also download specific series or studies using the following links:
+
+- [Download Series](https://series/seriesInstanceUID)
+- [Download Study](idcbrowser://studies/studyInstanceUID)
+
 
 ===========
 
